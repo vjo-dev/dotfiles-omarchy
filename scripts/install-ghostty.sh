@@ -1,13 +1,13 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$SCRIPT_DIR/lib.sh"
 
-echo -e "\nInstalling ghostty..."
-yay -S --noconfirm --needed ghostty
+ensure_pkg ghostty
 
 echo "Setting omarchy by default..."
 omarchy default terminal ghostty
 
-echo "Stow my ghostty config file."
-# rm -rf ~/.config/ghostty
-stow ghostty
+stow_pkg ghostty
 
 echo "ghostty installed."
