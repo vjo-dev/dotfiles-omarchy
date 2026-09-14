@@ -16,25 +16,18 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
-    -- add LazyVim and import its plugins
-    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    -- import/override with your plugins
+    -- import your plugins (includes the Omarchy-managed theme.lua symlink)
     { import = "plugins" },
-  },
-  defaults = {
-    -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
-    -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
-    lazy = false,
-    -- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
-    -- have outdated releases, which may break your Neovim install.
-    version = false, -- always use the latest git commit
-    -- version = "*", -- try installing the latest stable version for plugins that support semver
+    -- Omarchy's generated theme.lua references "LazyVim/LazyVim" to carry
+    -- opts.colorscheme; this virtual stub absorbs that spec so lazy.nvim
+    -- never installs LazyVim.
+    { "LazyVim/LazyVim", virtual = true, config = function() end },
   },
   install = { colorscheme = { "tokyonight", "habamax" } },
   checker = {
     enabled = true, -- check for plugin updates periodically
     notify = false, -- notify on update
-  }, -- automatically check for plugin updates
+  },
   performance = {
     rtp = {
       -- disable some rtp plugins
@@ -51,3 +44,15 @@ require("lazy").setup({
     },
   },
 })
+
+-- Apply the Omarchy theme colorscheme (previously done by LazyVim via
+-- opts.colorscheme in the generated theme spec).
+local ok, theme = pcall(require, "plugins.theme")
+if ok then
+  for _, spec in ipairs(theme) do
+    if spec[1] == "LazyVim/LazyVim" and spec.opts and spec.opts.colorscheme then
+      pcall(vim.cmd.colorscheme, spec.opts.colorscheme)
+      break
+    end
+  end
+end
