@@ -20,29 +20,14 @@ cd ~/dotfiles
 
 This dotfiles is dedicated to Omarchy, therefore required packages manager `yay` and `pacman` considered already installed. `stow` is installed on demand by `deploy.sh`.
 
-`./deploy.sh` installs `stow` (bootstrap), then runs each install script it lists.
-Each install script runs as a separate process: if one tool fails, the others
-still deploy, and a summary of skipped/failed tools is printed at the end
-(exit code 1 only if something actually failed).
-
-### Conflicts with existing config
+`./deploy.sh` installs `stow` if missing (bootstrap), then runs each install
+script it lists. Each install script runs as a separate process: if one tool
+fails, the others still deploy, and a summary of failures is printed at the
+end (exit code 1).
 
 If stow finds a real (non-symlink) file or directory in the way (e.g. an
-existing `~/.config/ghostty`), the install script asks what to do:
-
-- **[a] adopt** — move the existing files *into* the repo package
-  (`stow --adopt`), then symlink them back. Your repo version is overwritten
-  by the local files: review with `git diff` afterwards and commit or revert.
-- **[b] backup** (default) — move the top-level conflicting directory to
-  `<path>.bak-<timestamp>` (e.g. `~/.config/ghostty.bak-20250101-120000`),
-  then stow the repo package.
-- **[s] skip** — leave everything untouched and continue with the next tool.
-
-Backups are done at the top-level unit (the whole `~/.config/<tool>`
-directory, or the dotfile itself for loose files), never file by file.
-
-When no terminal is available (CI, piped output), the mode set by
-`CONFLICT_MODE` in `deploy.sh` is used; it defaults to `backup`.
+existing `~/.config/ghostty`), the tool is reported as failed with stow's
+output: move or delete the conflicting path manually, then re-run.
 Re-running it is idempotent: already-installed tools are skipped and
 `stow --restow` only re-links what drifted.
 
