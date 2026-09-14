@@ -24,6 +24,9 @@ require("lazy").setup({
     { "LazyVim/LazyVim", virtual = true, config = function() end },
   },
   install = { colorscheme = { "tokyonight", "habamax" } },
+  change_detection = {
+    notify = false,
+  },
   checker = {
     enabled = true, -- check for plugin updates periodically
     notify = false, -- notify on update
