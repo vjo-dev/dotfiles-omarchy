@@ -8,6 +8,7 @@ ensure_pkg example
 
 # Optional: configure the tool here, e.g. omarchy default terminal example.
 
+printf '\n'
 stow_pkg example
 
-echo "example installed."
+printf '\nexample: done.\n'

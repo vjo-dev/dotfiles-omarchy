@@ -5,9 +5,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 ensure_pkg ghostty
 
-echo "Setting omarchy by default..."
+printf '\nSetting omarchy default terminal...\n'
 omarchy default terminal ghostty
 
+printf '\n'
 stow_pkg ghostty
 
-echo "ghostty installed."
+printf '\nghostty: done.\n'

@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 ensure_pkg neovim
 
+printf '\n'
 stow_pkg nvim
 
-echo "nvim installed."
+printf '\nnvim: done.\n'
