@@ -10,7 +10,7 @@ fi
 
 printf '\n==> Deploying my config...\n'
 
-tools="shell ghostty nvim"
+tools="shell ghostty git nvim"
 
 failed=""
 for tool in $tools; do

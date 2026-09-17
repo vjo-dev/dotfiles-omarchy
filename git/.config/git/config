@@ -1,0 +1,60 @@
+# See https://git-scm.com/docs/git-config
+
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	gr = log --graph --all -n 20
+	gx = log --graph --decorate --pretty=oneline --abbrev-commit --all -n 20
+	cw = !git diff-tree --check $(git hash-object -t tree /dev/null) HEAD
+[init]
+	defaultBranch = master
+[pull]
+	rebase = true 			 # Rebase (instead of merge) on pull
+[push]
+	autoSetupRemote = true   # Automatically set upstream branch on push
+[diff]
+	algorithm = histogram    # Clearer diffs on moved/edited lines
+	colorMoved = plain       # Highlight moved blocks in diffs
+	mnemonicPrefix = true    # More intuitive refs in diff output
+[commit]
+	verbose = true           # Include diff comment in commit message template
+[column]
+	ui = auto 			     # Output in columns when possible
+[branch]
+	sort = -committerdate    # Sort branches by most recent commit first
+[tag]
+	sort = -version:refname  # Sort version numbers as you would expect
+[rerere]
+	enabled = true           # Record and reuse conflict resolutions
+	autoupdate = true        # Apply stored conflict resolutions automatically
+[format]
+	pretty = "%C(cyan)%h %Creset%ci %C(yellow)<%ae> %C(white)%s %C(magenta)%d%Creset"
+[color]
+  ui = auto
+  status = auto
+  branch = auto
+  diff = auto
+[color "branch"]
+  current = cyan reverse
+  local = yellow
+  remote = magenta
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = green
+  changed = yellow
+  untracked = cyan
+[user]
+	name = Vincent Journot
+	# email is machine-specific -> ~/.config/git/config.local
+	useConfigOnly = true     # refuse to commit if no email is configured
+
+# Machine-local overrides, stowed from git/.config/git/config.local
+# (gitignored: different on every machine). Must stay last.
+[include]
+	path = ~/.config/git/config.local

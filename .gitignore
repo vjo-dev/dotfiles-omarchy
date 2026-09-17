@@ -1,3 +1,6 @@
 # OS / editor junk
 *.log
 .DS_Store
+
+# Machine-local git identity (one per machine, never tracked)
+config.local

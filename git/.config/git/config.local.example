@@ -1,0 +1,14 @@
+# Machine-local git config. Copy to config.local and edit.
+# This file is stowed to ~/.config/git/config.local and is gitignored,
+# so each machine keeps its own identity.
+[user]
+	# private laptop
+	email = journot.vincent@gmail.com
+	# work laptop
+	# email = vincent.journot@heraeus.com
+
+# Other machine-specific settings can go here, e.g.:
+# [http]
+# 	proxy = http://proxy.corp:8080
+# [user]
+# 	signingkey = ...

@@ -25,9 +25,10 @@ ensure_pkg() {
 # stow's output as a warning and returns non-zero: fix manually, re-run.
 stow_pkg() {
 	local pkg="$1"
+	shift
 	local output
 	say "stowing '$pkg'..."
-	if ! output="$(cd "$REPO_DIR" && stow --restow "$pkg" 2>&1)"; then
+	if ! output="$(cd "$REPO_DIR" && stow --restow "$@" "$pkg" 2>&1)"; then
 		printf 'WARNING: could not stow %s, fix manually and re-run:\n%s\n' \
 			"$pkg" "$output" >&2
 		return 1
