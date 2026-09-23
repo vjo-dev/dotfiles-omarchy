@@ -32,7 +32,23 @@ Re-running it is idempotent: already-installed tools are skipped and
 `stow --restow` only re-links what drifted.
 
 Install scripts can also be run independently, e.g. `./scripts/install-ghostty.sh`.
-The list of tools is currently `ghostty` and `nvim`.
+The list of tools is currently:
+    - `shell`
+    - `ghostty`
+    - `git`
+    - `nvim`
+    - `hypr`
+
+Some packages only manage a single file inside a directory otherwise owned by
+the system or another tool (e.g. `hypr/.config/hypr/bindings.lua` alongside
+omarchy-managed files like `hyprland.lua`). These use `stow_pkg <pkg>
+--no-folding` so stow keeps the target a real directory and only symlinks the
+file(s) present in the package, instead of folding the whole directory into
+a single symlink. If the target file already exists as a real file (not a
+symlink), stow will refuse to link it: either delete it manually, or run
+`stow --adopt --no-folding --restow <pkg>` once from the repo root to pull
+the existing file into the repo (then check `git diff` before committing,
+in case it drifted from the repo's version).
 
 ## Adding a new tool
 
