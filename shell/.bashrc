@@ -13,3 +13,6 @@ source "$OMARCHY_PATH/default/bash/rc"
 
 ###### ALIASES
 alias vim='nvim'
+
+# ssh-agent
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
