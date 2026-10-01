@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Scroll helper for the SUPER+ALT+UP/DOWN binds in
+# hypr/.config/hypr/bindings.lua.
+#
+# `ydotool mousemove -w` is only a client: it writes to a uinput device through
+# the ydotoold daemon (systemd --user unit ydotool.service, enabled by
+# scripts/install-hypr.sh). When that daemon is down or lacks /dev/uinput
+# access, ydotool exits non-zero and prints to stderr. Hyprland discards the
+# exit status of a failing exec bind, so without this wrapper a broken daemon
+# is indistinguishable from a dead keybinding.
+#
+# Both binds are repeat-triggered, so a notification per keypress would be
+# unusable: warn at most once per WARN_INTERVAL, and re-arm once scrolling
+# works again.
+set -uo pipefail
+
+WARN_INTERVAL=3600
+stamp="${XDG_RUNTIME_DIR:-/tmp}/ydotool-scroll-warned-at"
+
+output="$(ydotool mousemove -w -- "$@" 2>&1)"
+status=$?
+
+if [ "$status" -eq 0 ]; then
+	rm -f "$stamp"
+	exit 0
+fi
+
+now="$(date +%s)"
+last="$(cat "$stamp" 2>/dev/null || echo 0)"
+if [ "$((now - last))" -ge "$WARN_INTERVAL" ]; then
+	printf '%s' "$now" >"$stamp"
+	omarchy-notification-send -u low \
+		"Scroll failed: ${output:-ydotool exited $status}. Is ydotoold running?"
+fi
+
+exit "$status"

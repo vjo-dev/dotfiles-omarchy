@@ -28,7 +28,7 @@
 -- o.bind("SUPER + H", nil, "voxtype record toggle")
 -- o.bind("SUPER + PERIOD", nil, "omarchy-shell shell toggle omarchy.emojis")
 
--- Scroll Up / Down using ydotool
+-- Scroll Up / Down using ydotool.
 -- Note: SUPER+ALT+UP/DOWN were bound to "move window to group on top/bottom".
 -- Unbind SUPER+ALT+wheel (was: next/previous window in group — still available
 -- via SUPER+ALT+TAB), otherwise Hyprland intercepts the injected wheel events
@@ -37,5 +37,12 @@ hl.unbind("SUPER + ALT + mouse_down")
 hl.unbind("SUPER + ALT + mouse_up")
 hl.unbind("SUPER + ALT + UP")
 hl.unbind("SUPER + ALT + DOWN")
-o.bind("SUPER + ALT + UP", "Scroll Up", "ydotool mousemove -w -- 0 2", { repeating = true })
-o.bind("SUPER + ALT + DOWN", "Scroll Down", "ydotool mousemove -w -- 0 -2", { repeating = true })
+
+-- Absolute path: ydotool-scroll lives in ~/.local/bin, which is on an
+-- interactive shell's PATH but not guaranteed to be on the one Hyprland hands
+-- to keybind dispatchers. The wrapper turns a dead ydotoold into a
+-- notification, since a failing exec bind fails silently.
+local scroll_helper = (os.getenv("HOME") or "") .. "/.local/bin/ydotool-scroll"
+
+o.bind("SUPER + ALT + UP", "Scroll Up", o.shell_quote(scroll_helper) .. " 0 2", { repeating = true })
+o.bind("SUPER + ALT + DOWN", "Scroll Down", o.shell_quote(scroll_helper) .. " 0 -2", { repeating = true })
