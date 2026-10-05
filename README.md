@@ -38,6 +38,7 @@ The list of tools is currently:
     - `git`
     - `nvim`
     - `hypr`
+    - `omarchy` (branding only, e.g. the custom screensaver ASCII art)
 
 Some packages only manage a single file inside a directory otherwise owned by
 the system or another tool (e.g. `hypr/.config/hypr/bindings.lua` alongside
