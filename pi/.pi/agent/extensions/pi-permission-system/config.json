@@ -1,0 +1,77 @@
+{
+  "$schema": "https://raw.githubusercontent.com/gotgenes/pi-packages/main/packages/pi-permission-system/schemas/permissions.schema.json",
+  // Prompts are now rare and each one is meaningful -> single press to decide.
+  "doublePressToConfirm": false,
+  "permission": {
+    "*": "allow",
+    "path": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow",
+      "~/.ssh/*": "deny",
+      "~/.pi/agent/auth.json": "deny",
+      "~/.aws/credentials": "deny",
+      "~/.config/gcloud/*": "deny",
+      "~/.netrc": "deny",
+      "~/.pgpass": "deny",
+      "*.pem": "deny",
+      "*.p12": "deny",
+      "id_rsa": "deny"
+    },
+    // Reading outside the cwd is silent; writing outside it still asks.
+    // This is what removes ~90% of the old prompts.
+    "external_directory_read": {
+      "*": "allow"
+    },
+    "external_directory_write": {
+      "*": "allow",
+      "/tmp/*": "allow",
+      "~/.cache/*": "allow"
+    },
+    "bash": {
+      "*": "allow",
+      // --- irreversible filesystem ---
+      "rm -rf *": "deny",
+      "rm -fr *": "deny",
+      "rm -Rf *": "deny",
+      // --- privilege elevation ---
+      "sudo *": "ask",
+      "doas *": "ask",
+      // --- publishing ---
+      "git push*": "ask",
+      // --- database clients -------------------------------------------
+      // NOTE: do NOT try to gate SQL verbs (*INSERT*, *UPDATE*SET*, ...).
+      // Bash patterns are case-sensitive (wildcard-matcher.ts compiles
+      // without the `i` flag on POSIX), and a heredoc body is never part
+      // of the matched command text (node-text.ts SKIP_SUBTREE_TYPES).
+      // So `psql <<'SQL' ... DELETE ... SQL` is unmatchable by verb, and
+      // verb rules would only break `grep -rn "DELETE FROM" src/`.
+      // The client binary itself is the only sound gate.
+      "psql *": "ask",
+      "pgcli *": "ask",
+      "pg_dump *": "ask",
+      "pg_dumpall *": "ask",
+      "pg_restore *": "ask",
+      "createdb *": "ask",
+      "pg_ctl *": "ask",
+      "dropdb *": {
+        "action": "deny",
+        "reason": "Dropping a database is never agent-initiated. Run it yourself."
+      },
+      "sqlplus *": "ask",
+      "sql *": "ask",
+      "sqlldr *": "ask",
+      "impdp *": "ask",
+      "expdp *": "ask",
+      "rman *": "ask",
+      "usql *": "ask",
+      "mysql *": "ask",
+      // --- indirection that would otherwise ride the permissive "*" ---
+      "docker exec *": "ask",
+      "docker compose exec *": "ask",
+      "kubectl exec *": "ask",
+      "ssh *": "ask"
+    }
+  }
+}

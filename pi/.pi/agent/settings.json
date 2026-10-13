@@ -1,0 +1,19 @@
+{
+  "theme": "omarchy-system",
+  "lastChangelogVersion": "0.87.1",
+  "packages": [
+    "npm:@gotgenes/pi-permission-system",
+    "npm:pi-image-tools",
+    "npm:pi-web-access",
+    "npm:@yorch/pi-statusbar",
+    "npm:@pixu1980/pi-path-picker"
+  ],
+  "statusbar": {
+    "enabled": true,
+    "preset": "default",
+    "separator": "dot",
+    "contextBar": true,
+    "contextMode": "percent"
+  },
+  "hideThinkingBlock": false
+}

@@ -1,0 +1,8 @@
+{
+  "name": "subagents-herdr",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local, personal fork: async pi subagents running in herdr panes (not tmux). No upstream git remote.",
+  "type": "module",
+  "license": "MIT"
+}

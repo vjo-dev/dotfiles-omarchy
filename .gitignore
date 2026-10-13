@@ -4,3 +4,25 @@
 
 # Machine-local git identity (one per machine, never tracked)
 config.local
+
+# herdr: runtime state that lives beside config.toml in ~/.config/herdr.
+# --no-folding already keeps these out of the stow symlink; this is a
+# second guard against an accidental `stow --adopt` on the whole directory.
+*.sock
+session.json
+session-snapshots/
+.plugins.lock
+release-notes.json
+
+# pi: credentials, session state, and pi-managed installs under ~/.pi/agent.
+# The pi package only ever stows an explicit allowlist of files, so none of
+# this should ever be copied in, but keep the guard anyway.
+auth.json
+models-store.json
+trust.json
+sessions/
+npm/
+.profile/
+node_modules/
+config.json.bak
+logs/

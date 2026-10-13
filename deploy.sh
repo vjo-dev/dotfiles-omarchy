@@ -10,7 +10,7 @@ fi
 
 printf '\n==> Deploying my config...\n'
 
-tools="shell ghostty git nvim hypr omarchy"
+tools="shell ghostty herdr pi git nvim hypr omarchy"
 
 failed=""
 for tool in $tools; do

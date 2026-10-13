@@ -35,6 +35,8 @@ Install scripts can also be run independently, e.g. `./scripts/install-ghostty.s
 The list of tools is currently:
     - `shell`
     - `ghostty`
+    - `herdr`
+    - `pi`
     - `git`
     - `nvim`
     - `hypr`
@@ -50,6 +52,15 @@ symlink), stow will refuse to link it: either delete it manually, or run
 `stow --adopt --no-folding --restow <pkg>` once from the repo root to pull
 the existing file into the repo (then check `git diff` before committing,
 in case it drifted from the repo's version).
+
+`herdr` and `pi` use `--no-folding` for a stronger reason than convenience:
+both directories (`~/.config/herdr`, `~/.pi/agent`) hold live runtime state
+and credentials beside their config (sockets, logs, session state, and for
+`pi` also `auth.json`, `models-store.json`, and a live browser profile under
+`extensions/browser/.profile/`). Folding would symlink the whole directory
+and expose that state inside the repo. `pi` goes further and uses a strict
+allowlist: only files explicitly copied into `pi/.pi/agent/` are ever
+stowed or adopted, so nothing in `~/.pi/agent` is tracked by default.
 
 ## Adding a new tool
 
