@@ -11,12 +11,19 @@ name = "terminal"
 # has to be dark for it to read - same colors as status-left's "#[fg=black,bg=blue]"
 panel_bg = "black"
 
+# Matches the pane-border accent so the focused Space/Agent row in the
+# sidebar reads as clearly as the focused pane frame does.
+active_row_bg = "#313244"
+
 [terminal]
 # Matches -c "#{pane_current_path}" on every split, window, and session
 new_cwd = "follow"
 
 [keys]
-prefix = "ctrl+space"
+# Ctrl+T is the primary prefix; Ctrl+Space stays live as a fallback during
+# the transition (fzf's file widget moved to Ctrl+G in shell/.bashrc, and
+# pi's thinking-block toggle moved to Ctrl+Shift+T, to free Ctrl+T here).
+prefix = ["ctrl+t", "ctrl+space"]
 
 # Config and help
 reload_config = "prefix+q"
@@ -69,11 +76,19 @@ previous_workspace = ["prefix+shift+p", "alt+up"]
 next_workspace = ["prefix+shift+n", "alt+down"]
 
 [ui]
-accent = "blue"
+# High-contrast accent so the focused pane's frame and label are unmistakable
+# (was "blue", too close to the default terminal palette to stand out).
+accent = "#f9e2af"
 
-# tmux drew single-line dividers between adjacent panes and no outer frame
-pane_gaps = false
-pane_outer_borders = false
+# Frame every pane, including a lone one, and show its agent name in the
+# border so focus is visible without relying on color alone.
+pane_borders = "always"
+pane_outer_borders = true
+show_agent_labels_on_pane_borders = true
+
+# tmux drew single-line dividers between adjacent panes and no outer frame;
+# traded for visually distinct boxes now that pane_borders is "always".
+pane_gaps = true
 
 # tmux had no scrollbar column beside its panes
 pane_scrollbars = false
