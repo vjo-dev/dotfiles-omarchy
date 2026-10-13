@@ -39,6 +39,8 @@ split_vertical = ["prefix+v", "alt+shift+enter"]
 close_pane = ["prefix+x", "alt+esc"]
 zoom = "prefix+z"
 last_pane = "prefix+;"
+# Clears screen+scrollback without sending input to the running process.
+clear_pane = "prefix+ctrl+k"
 
 focus_pane_left = "ctrl+alt+left"
 focus_pane_down = "ctrl+alt+down"
@@ -58,6 +60,10 @@ resize_pane_right = "ctrl+alt+shift+right"
 
 # No tmux equivalent; herdr's default prefix+shift+p is taken by previous session
 rename_pane = "prefix+shift+o"
+
+# Agents - cut across every workspace and tab, unlike panes/tabs/workspaces
+previous_agent = "ctrl+alt+["
+next_agent = "ctrl+alt+]"
 
 # Windows -> tabs
 new_tab = "prefix+c"
@@ -79,6 +85,17 @@ rename_workspace = "prefix+shift+r"
 close_workspace = "prefix+shift+d"
 previous_workspace = ["prefix+shift+p", "alt+up"]
 next_workspace = ["prefix+shift+n", "alt+down"]
+# Jump to workspace 1-9 directly, mirroring switch_tab above.
+switch_workspace = "prefix+shift+1..9"
+
+# Worktrees: new_worktree keeps herdr's default (prefix+shift+g); these two
+# have no default binding.
+open_worktree = "prefix+shift+w"
+remove_worktree = "prefix+shift+x"
+
+# Ctrl+Alt+1..9 jumps straight to agent N, in the agent sidebar's order.
+[keys.indexed]
+agents = "ctrl+alt"
 
 [ui]
 # High-contrast accent so the focused pane's frame and label are unmistakable
