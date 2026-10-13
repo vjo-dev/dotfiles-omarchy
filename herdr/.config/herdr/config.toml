@@ -47,16 +47,16 @@ focus_pane_down = "alt+down"
 focus_pane_up = "alt+up"
 focus_pane_right = "alt+right"
 
-# resize_mode is a single "enter resize mode" toggle, not four directional
-# binds (those are resize_pane_* below) - this was a tmux-era leftover that
-# collapsed onto one binding.
-resize_mode = "prefix+ctrl+left"
+# Keyboard pane resizing is disabled in favor of mouse drag on split
+# borders. resize_mode defaults to prefix+r, which would otherwise collide
+# with rename_tab, so it's explicitly unbound rather than left unset.
+resize_mode = []
 
-# Like resize-pane on C-M-S-arrows
-resize_pane_left = "ctrl+alt+shift+left"
-resize_pane_down = "ctrl+alt+shift+down"
-resize_pane_up = "ctrl+alt+shift+up"
-resize_pane_right = "ctrl+alt+shift+right"
+# Resize via mouse drag on split borders instead - keyboard resize disabled.
+resize_pane_left = []
+resize_pane_down = []
+resize_pane_up = []
+resize_pane_right = []
 
 # No tmux equivalent; herdr's default prefix+shift+p is taken by previous session
 rename_pane = "prefix+shift+o"
