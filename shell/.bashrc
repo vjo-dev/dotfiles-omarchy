@@ -16,3 +16,9 @@ alias vim='nvim'
 
 # ssh-agent
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
+# Free Ctrl+T for the herdr prefix (see herdr/.config/herdr/config.toml);
+# fzf's file widget moves to Ctrl+G. Ctrl+R (history) and Alt+C (cd) are
+# untouched; the `ff` alias is still available as a mouse-free fallback.
+bind -r '\C-t' 2>/dev/null
+bind -x '"\C-g": fzf-file-widget' 2>/dev/null
