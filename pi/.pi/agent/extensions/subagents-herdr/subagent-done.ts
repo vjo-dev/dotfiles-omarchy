@@ -141,6 +141,15 @@ export default function (pi: ExtensionAPI) {
   let userTookOver = false;
   let agentStarted = false;
   let awaitingAnswer = false;
+  // Mirror awaitingAnswer into herdr's blocked state (picked up by
+  // herdr-agent-state.ts, which is loaded into every subagent session).
+  // Guarded so {active:true}/{active:false} pairs always balance.
+  let herdrBlockActive = false;
+  function setHerdrBlocked(active: boolean, label?: string) {
+    if (active === herdrBlockActive) return;
+    herdrBlockActive = active;
+    pi.events.emit("herdr:blocked", active ? { active: true, label } : { active: false });
+  }
 
   pi.on("session_start", (_event, ctx) => {
     const tools = pi.getAllTools();
@@ -151,6 +160,7 @@ export default function (pi: ExtensionAPI) {
 
   pi.on("input", () => {
     awaitingAnswer = false;
+    setHerdrBlocked(false);
     if (!shouldMarkUserTookOver(agentStarted)) return;
     userTookOver = true;
   });
@@ -158,6 +168,11 @@ export default function (pi: ExtensionAPI) {
   pi.on("agent_start", () => {
     agentStarted = true;
     awaitingAnswer = false;
+    setHerdrBlocked(false);
+  });
+
+  pi.on("session_shutdown", () => {
+    setHerdrBlocked(false);
   });
 
   pi.on("agent_end", (event, ctx) => {
@@ -247,6 +262,7 @@ export default function (pi: ExtensionAPI) {
       }
 
       awaitingAnswer = true;
+      setHerdrBlocked(true, `Question for orchestrator: ${params.question}`);
       const askData = {
         name: process.env.PI_HERD_NAME ?? "subagent",
         agent: process.env.PI_HERD_AGENT ?? "",

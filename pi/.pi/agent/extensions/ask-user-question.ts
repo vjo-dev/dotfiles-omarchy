@@ -597,7 +597,14 @@ export default function askUserQuestion(pi: ExtensionAPI) {
 				return unavailableResult(params.question, mode, "ask_user_question requires interactive mode UI", context);
 			}
 
-			return withUILock(async () => {
+			// Tell herdr (via its pi integration's "herdr:blocked" listener) that this
+			// pane is waiting on the user — sidebar blocked symbol, request sound, toast.
+			pi.events.emit("herdr:blocked", {
+				active: true,
+				label: `Question: ${params.question}`,
+			});
+			try {
+				return await withUILock(async () => {
 				if (mode === "text") {
 					const editorTitle = context ? `${params.question}\n\n${context}` : params.question;
 					const answer = await ctx.ui.editor(editorTitle);
@@ -623,6 +630,9 @@ export default function askUserQuestion(pi: ExtensionAPI) {
 				}
 				return buildResult(params.question, context, mode, answers);
 			});
+			} finally {
+				pi.events.emit("herdr:blocked", { active: false });
+			}
 		},
 
 		renderCall(args, theme) {

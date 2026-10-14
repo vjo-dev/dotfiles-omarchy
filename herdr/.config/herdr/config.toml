@@ -134,4 +134,6 @@ window_title = "{hostname}: {workspace}"
 
 status_indicators = "symbols"
 [ui.toast]
-delivery = "terminal"
+# "system" talks to the OS notification daemon (Omarchy's quickshell) directly;
+# "terminal" relied on OSC escapes the terminal here doesn't support.
+delivery = "system"

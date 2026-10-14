@@ -341,11 +341,18 @@ After completing a step, include a [DONE:n] tag in your response.`,
 			display: true,
 		};
 
-		const choice = await ctx.ui.select("Plan mode - what next?", [
-			"Execute the plan (track progress)",
-			"Stay in plan mode",
-			"Refine the plan",
-		]);
+		// Report "waiting on the user" to herdr while the prompt is open.
+		pi.events.emit("herdr:blocked", { active: true, label: "Plan mode: choose next step" });
+		let choice: string | undefined;
+		try {
+			choice = await ctx.ui.select("Plan mode - what next?", [
+				"Execute the plan (track progress)",
+				"Stay in plan mode",
+				"Refine the plan",
+			]);
+		} finally {
+			pi.events.emit("herdr:blocked", { active: false });
+		}
 
 		if (choice?.startsWith("Execute")) {
 			const firstTodoItem = todoItems[0];
@@ -373,7 +380,13 @@ After completing a step, include a [DONE:n] tag in your response.`;
 				{ triggerTurn: true, deliverAs: "followUp" },
 			);
 		} else if (choice === "Refine the plan") {
-			const refinement = await ctx.ui.editor("Refine the plan:", "");
+			pi.events.emit("herdr:blocked", { active: true, label: "Plan mode: refine the plan" });
+			let refinement: string | undefined;
+			try {
+				refinement = await ctx.ui.editor("Refine the plan:", "");
+			} finally {
+				pi.events.emit("herdr:blocked", { active: false });
+			}
 			if (refinement?.trim()) {
 				pi.sendMessage(planTodoListMessage, { deliverAs: "followUp" });
 				pi.sendUserMessage(refinement.trim(), { deliverAs: "followUp" });
