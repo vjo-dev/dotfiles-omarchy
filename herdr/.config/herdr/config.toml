@@ -42,10 +42,10 @@ last_pane = "prefix+;"
 # Clears screen+scrollback without sending input to the running process.
 clear_pane = "prefix+ctrl+k"
 
-focus_pane_left = "alt+left"
-focus_pane_down = "alt+down"
-focus_pane_up = "alt+up"
-focus_pane_right = "alt+right"
+focus_pane_left = "ctrl+alt+left"
+focus_pane_down = "ctrl+alt+down"
+focus_pane_up = "ctrl+alt+up"
+focus_pane_right = "ctrl+alt+right"
 
 # Keyboard pane resizing is disabled in favor of mouse drag on split
 # borders. resize_mode defaults to prefix+r, which would otherwise collide
@@ -70,8 +70,8 @@ new_tab = "prefix+c"
 rename_tab = "prefix+r"
 close_tab = "prefix+k"
 switch_tab = ["prefix+1..9", "alt+1..9"]
-previous_tab = ["prefix+p", "ctrl+alt+left"]
-next_tab = ["prefix+n", "ctrl+alt+right"]
+previous_tab = ["prefix+p", "alt+left"]
+next_tab = ["prefix+n", "alt+right"]
 
 # Like swap-window -t -1/+1 on M-S-Left/Right
 move_tab_previous = "alt+shift+left"
@@ -83,8 +83,8 @@ rename_workspace = "prefix+shift+r"
 # Moved off herdr's own default (prefix+shift+k), which silently shadowed
 # swap_pane_up with no warning - see omacom/omarchy#10062.
 close_workspace = "prefix+shift+d"
-previous_workspace = ["prefix+shift+p", "ctrl+alt+up"]
-next_workspace = ["prefix+shift+n", "ctrl+alt+down"]
+previous_workspace = ["prefix+shift+p", "alt+up"]
+next_workspace = ["prefix+shift+n", "alt+down"]
 # Jump to workspace 1-9 directly, mirroring switch_tab above.
 switch_workspace = "prefix+shift+1..9"
 
