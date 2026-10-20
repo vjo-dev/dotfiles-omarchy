@@ -1,6 +1,11 @@
 {
   "theme": "omarchy-system",
-  "lastChangelogVersion": "0.87.1",
+  "lastChangelogVersion": "0.99.0",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "claude-fable-5",
+  "markdown": {
+    "mermaid": "final"
+  },
   "packages": [
     "npm:@gotgenes/pi-permission-system",
     "npm:pi-image-tools",
