@@ -28,6 +28,33 @@
 -- o.bind("SUPER + H", nil, "voxtype record toggle")
 -- o.bind("SUPER + PERIOD", nil, "omarchy-shell shell toggle omarchy.emojis")
 
+-- Remap F-cluster / add quick launchers (2026-02 rotation):
+--   SUPER+F:        Full screen      -> File manager
+--   SUPER+SHIFT+F:  File manager     -> File manager @ ~/mnt/104145v
+--   SUPER+ALT+F:    Full width       -> (unbound)
+--   SUPER+Z:        (unbound)        -> Full width
+--   SUPER+ALT+Z:    (unbound)        -> Full screen
+--   SUPER+B:        (unbound)        -> Browser
+-- Drop duplicate browser defaults (browser now lives on SUPER+B):
+--   SUPER+SHIFT+B, SUPER+SHIFT+RETURN
+hl.unbind("SUPER + F")          -- was: Full screen
+hl.unbind("SUPER + SHIFT + F")  -- was: File manager
+hl.unbind("SUPER + ALT + F")    -- was: Full width
+hl.unbind("SUPER + SHIFT + B")      -- was: Browser (duplicate)
+hl.unbind("SUPER + SHIFT + RETURN") -- was: Browser (duplicate)
+
+local mnt_104145v = (os.getenv("HOME") or "") .. "/mnt/104145v"
+
+o.bind("SUPER + F", "File manager", { omarchy = "nautilus" })
+o.bind("SUPER + SHIFT + F", "File manager (104145v)", { launch = "nautilus --new-window " .. o.shell_quote(mnt_104145v) })
+o.bind("SUPER + ALT + Z", "Full screen", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
+o.bind("SUPER + Z", "Full width", hl.dsp.window.fullscreen({ mode = "maximized" }))
+o.bind("SUPER + B", "Browser", { omarchy = "browser" })
+
+-- Agent Chat plugin (robson.agent-chat): fullscreen chat with the default
+-- coding agent. Plain SUPER+A was unbound (Agent terminal is SUPER+SHIFT+CTRL+A).
+o.bind("SUPER + A", "Agent chat", "omarchy-shell shell toggle robson.agent-chat")
+
 -- Scroll Up / Down using ydotool.
 -- Note: SUPER+ALT+UP/DOWN were bound to "move window to group on top/bottom".
 -- Unbind SUPER+ALT+wheel (was: next/previous window in group — still available
@@ -44,5 +71,12 @@ hl.unbind("SUPER + ALT + DOWN")
 -- notification, since a failing exec bind fails silently.
 local scroll_helper = (os.getenv("HOME") or "") .. "/.local/bin/ydotool-scroll"
 
-o.bind("SUPER + ALT + UP", "Scroll Up", o.shell_quote(scroll_helper) .. " 0 2", { repeating = true })
-o.bind("SUPER + ALT + DOWN", "Scroll Down", o.shell_quote(scroll_helper) .. " 0 -2", { repeating = true })
+-- Note: `repeating = true` arms Hyprland's key repeat, but it can never fire
+-- for these binds: the injected wheel event itself reaches
+-- CKeybindManager::onAxisEvent, which clears all active repeating binds
+-- (verified in Hyprland 0.56.2 source). Hold-to-scroll is therefore not
+-- achievable this way; compensate with a larger increment per press.
+local scroll_step = 5
+
+o.bind("SUPER + ALT + UP", "Scroll Up", o.shell_quote(scroll_helper) .. " 0 " .. scroll_step, { repeating = true })
+o.bind("SUPER + ALT + DOWN", "Scroll Down", o.shell_quote(scroll_helper) .. " 0 -" .. scroll_step, { repeating = true })
