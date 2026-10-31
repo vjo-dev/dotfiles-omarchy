@@ -7,11 +7,11 @@
     "mermaid": "final"
   },
   "packages": [
-    "npm:@gotgenes/pi-permission-system",
-    "npm:pi-image-tools",
-    "npm:pi-web-access",
-    "npm:@yorch/pi-statusbar",
-    "npm:@pixu1980/pi-path-picker"
+    "npm:@gotgenes/pi-permission-system@42.0.0",
+    "npm:pi-image-tools@1.4.0",
+    "npm:pi-web-access@0.46.0",
+    "npm:@yorch/pi-statusbar@0.4.3",
+    "npm:@pixu1980/pi-path-picker@0.1.28"
   ],
   "statusbar": {
     "enabled": true,
