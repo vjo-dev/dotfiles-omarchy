@@ -142,6 +142,12 @@ function findNpmExtensionFile(pkgName: string, entryFile = "index.ts"): string |
 }
 
 const WEB_ACCESS_ENTRY = findNpmExtensionFile("pi-web-access");
+
+// Security enforcement: the permission system must ride along into every
+// restricted child. `--no-extensions` strips normal package discovery, so
+// without an explicit `-e` a child would run with NO path denies and no
+// ask/deny gates — i.e. MORE privilege than the parent session.
+const PERMISSION_SYSTEM_ENTRY = findNpmExtensionFile("@gotgenes/pi-permission-system", "src/index.ts");
 const BUILTIN_TOOL_EXTENSION_MAP: Record<string, string | undefined> = {
   web_search: WEB_ACCESS_ENTRY,
   fetch_content: WEB_ACCESS_ENTRY,
@@ -347,6 +353,17 @@ function applySandboxToParts(
     parts.push("--no-extensions", "--tools", loadout.toolAllowlist);
     const { extensionArgs } = buildSubagentToolAllowlist(loadout.toolAllowlist);
     parts.push(...extensionArgs);
+    // Fail closed: never spawn a restricted child without the permission
+    // system. Without it the child has no path denies (~/.pgpass, *.env,
+    // auth.json, ...) and no ask/deny command gates.
+    if (!PERMISSION_SYSTEM_ENTRY) {
+      throw new Error(
+        "subagents-herdr: @gotgenes/pi-permission-system not found under the agent npm dir — " +
+          "refusing to spawn an ungated restricted child. Run `pi update --extensions` " +
+          "(the package is declared in settings.json `packages`) or adjust PERMISSION_SYSTEM_ENTRY.",
+      );
+    }
+    parts.push("-e", PERMISSION_SYSTEM_ENTRY);
   }
   // Load herdr's own pi lifecycle integration into restricted children so
   // herdr reports authoritative working/idle status for them too. Skipped

@@ -32,7 +32,16 @@ const BUILD_THINKING = "medium" as const;
 // Tools
 const PLAN_MODE_TOOLS = ["read", "bash", "grep", "find", "ls", "questionnaire"];
 const NORMAL_MODE_TOOLS = ["read", "bash", "edit", "write"];
-const PLAN_MODE_DISABLED_TOOLS = new Set<string>(["edit", "write"]);
+// Spawning tools are hidden in plan mode: subagents launch as separate pi
+// processes that do NOT inherit plan mode, so a child would execute with
+// full tool access while the orchestrator is supposedly read-only.
+const PLAN_MODE_DISABLED_TOOLS = new Set<string>([
+	"edit",
+	"write",
+	"subagent",
+	"subagent_message",
+	"subagents_list",
+]);
 const PLAN_MANAGED_TOOLS = new Set<string>([...PLAN_MODE_TOOLS, ...NORMAL_MODE_TOOLS]);
 
 interface PlanModeState {
@@ -203,9 +212,23 @@ export default function planModeExtension(pi: ExtensionAPI): void {
 		handler: async (ctx) => togglePlanMode(ctx),
 	});
 
-	// Block destructive bash commands in plan mode
+	// Block subagent spawning and destructive bash commands in plan mode.
+	// Hiding the tools (PLAN_MODE_DISABLED_TOOLS) is the first layer; this
+	// hard block is defense in depth in case another extension or a session
+	// resume re-activates them while plan mode is on.
+	const PLAN_MODE_HARD_BLOCKED_TOOLS = new Set(["subagent", "subagent_message"]);
 	pi.on("tool_call", async (event) => {
-		if (!planModeEnabled || event.toolName !== "bash") return;
+		if (!planModeEnabled) return;
+
+		if (PLAN_MODE_HARD_BLOCKED_TOOLS.has(event.toolName)) {
+			return {
+				block: true,
+				reason:
+					"Plan mode: subagents cannot be spawned while planning — a child agent runs in a separate process without plan mode and would execute with full tool access. Finish the plan and get approval first.",
+			};
+		}
+
+		if (event.toolName !== "bash") return;
 
 		const command = event.input.command as string;
 		if (!isSafeCommand(command)) {

@@ -2,6 +2,12 @@
   "$schema": "https://raw.githubusercontent.com/gotgenes/pi-packages/main/packages/pi-permission-system/schemas/permissions.schema.json",
   // Prompts are now rare and each one is meaningful -> single press to decide.
   "doublePressToConfirm": false,
+  // safe_bash (subagents-herdr worker tool) wraps the native bash tool under
+  // a different name. Without this mapping it would BYPASS every bash rule
+  // below — the permission system keys shell enforcement on the tool name.
+  "shellTools": {
+    "safe_bash": { "commandArgument": "command" }
+  },
   "permission": {
     "*": "allow",
     "path": {
