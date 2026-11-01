@@ -23,9 +23,33 @@
   * Architecture: system boundaries, cross-cutting structure
   * Glossary / domain language
   * Load the `domain-modeling` skill when writing these.
+* **Glossary Usage:** If the repo has a `GLOSSARY.md`, use its terms in code, tests, and commit messages.
+* **ADR Location:** Decision records live in `docs/adr/` unless the project says otherwise.
 * **Unprompted Docs:** Never create documentation files unprompted. If one seems genuinely warranted, propose it in the plan and wait for approval.
 * **Doc Drift:** When touching code whose existing docs now contradict it, flag the drift; prefer trimming or deleting redundant docs over expanding them.
 * **Comments (LIGHT):** Sparse by default — well-factored code needs few. Use only where code cannot make itself clear: non-obvious *why* (constraints, gotchas, workarounds). Never restate *what* the code does, and never relocate banned documentation into comments (no doc-style headers, narrative walkthroughs, tutorial blocks, or changelog comments).
+
+## Git Workflow & Guardrails
+
+* **Human-only operations (HARD):**
+  * `git push` (any form)
+  * history rewrites: `reset --hard`, `rebase`, amending existing commits, anything `--force`
+  * deleting branches or tags
+  * committing on `main`/`master`
+* **Branch workflow** (default; a project's AGENTS.md may override):
+  * `main` is always green. Code reaches it only by squash-merge, performed and
+    pushed by the human.
+  * Work happens on short-lived branches cut from `main`: `feat/<name>` or
+    `fix/<name>`, lifespan ≤ ~2 days. Split features that outgrow this.
+  * A feature is finished by: project merge gate green → draft the squash commit
+    message (imperative summary, short what/why body) → hand over to the human,
+    who reviews commit by commit before squash-merging.
+* **Commit Shaping:** Shape branch history for the reviewer as you commit —
+  history rewrites are off-limits, so commits must be born logical. One commit
+  per coherent step: a refactor, a behavior change with its tests, a file move,
+  a doc update. A reviewer should be able to read the branch commit by commit.
+  Imperative one-line messages (a short body when the why isn't obvious), no
+  attribution trailers.
 
 ## DevOps & Shell Guardrails
 
