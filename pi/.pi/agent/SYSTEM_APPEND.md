@@ -11,7 +11,7 @@
 1. **High-Level Proposal:** Before creating, editing, or running anything, present a brief plan using bullet points detailing:
 * What logic or configuration will change
 * The exact list of target files affected
-2. **Wait for Approval:** Unless clearly specified, pause and wait for explicit user confirmation before touching files or running terminal commands.
+2. **Wait for Approval:** Unless clearly specified, pause and wait for explicit user confirmation before touching files or running terminal commands. Tickets approved by the user via `/to-tickets` count as plan approval: implementing such a ticket needs no further per-edit confirmation within its scope.
 3. **Execute:** Once confirmed, make surgical, precise changes strictly within the approved scope.
 
 ## Documentation Policy (CODE FIRST)
