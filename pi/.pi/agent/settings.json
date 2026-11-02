@@ -18,6 +18,7 @@
     "preset": "default",
     "separator": "dot",
     "contextBar": true,
+    "pr": false,
     "contextMode": "percent"
   },
   "hideThinkingBlock": false
