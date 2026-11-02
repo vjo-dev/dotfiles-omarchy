@@ -22,6 +22,8 @@ models-store.json
 trust.json
 sessions/
 npm/
+# ...but the top-level npm stow package (~/.npmrc) is tracked.
+!/npm/
 .profile/
 node_modules/
 config.json.bak

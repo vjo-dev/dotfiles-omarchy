@@ -41,6 +41,7 @@ The list of tools is currently:
     - `nvim`
     - `hypr`
     - `omarchy` (branding only, e.g. the custom screensaver ASCII art)
+    - `npm` (`~/.npmrc` only; npm itself comes from mise)
 
 Some packages only manage a single file inside a directory otherwise owned by
 the system or another tool (e.g. `hypr/.config/hypr/bindings.lua` alongside
