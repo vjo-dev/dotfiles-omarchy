@@ -27,6 +27,9 @@ vim.o.winborder = "rounded" -- every float
 vim.o.list = true -- make stray whitespace visible
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.o.inccommand = "split" -- live :s preview
+-- Default shapes per mode, plus blink everywhere (nvim's default is steady;
+-- the terminal/herdr only blink when nvim requests it via DECSCUSR).
+vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait700-blinkoff400-blinkon250"
 
 -- §1.4 Search, files, undo, timing
 vim.o.ignorecase = true

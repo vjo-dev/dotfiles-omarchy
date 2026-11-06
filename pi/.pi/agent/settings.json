@@ -22,6 +22,7 @@
     "contextMode": "percent"
   },
   "hideThinkingBlock": false,
+  "showHardwareCursor": true,
   "extensionChangelogVersions": {
     "{\"source\":\"npm:@gotgenes/pi-permission-system@42.0.0\",\"scope\":\"user\"}": "42.0.0",
     "{\"source\":\"npm:pi-image-tools@1.4.0\",\"scope\":\"user\"}": "1.4.0",

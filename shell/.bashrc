@@ -44,6 +44,11 @@ markdown_extensions:
 EOF
 }
 
+# Blinking block cursor (DECSCUSR 1) at every prompt. Ghostty blinks by
+# default, but herdr forwards each pane's requested cursor style (steady
+# block) to the host terminal, so the shell has to ask for blink itself.
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }printf '\\e[1 q'"
+
 # ssh-agent
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
