@@ -129,6 +129,108 @@ return {
 		},
 	},
 
+	["skills-small"] = {
+		title = "Skills: small single-session item (Lesson 1)",
+		steps = {
+			{
+				label = "At the pi prompt: grill the idea (answer its questions; may grow GLOSSARY.md)",
+				keys = "/grill-with-docs <item + context from TODO.md>",
+			},
+			{
+				label = "Same window — no spec needed for a single-session item",
+				keys = "/implement <what we just specced>",
+			},
+			{
+				label = "It drives /tdd + /code-review on a feat/ branch; done when npm run check is green",
+			},
+			{
+				label = "Close the loop: accept/reject suggestions, then squash-merge by hand",
+				keys = "/retro",
+			},
+		},
+	},
+
+	["skills-feature"] = {
+		title = "Skills: multi-session feature (Lesson 2)",
+		steps = {
+			{
+				label = "One unbroken session for the thinking — never /clear between grill → spec → tickets",
+			},
+			{
+				label = "Grill the feature (expect questions on fields, ranking, edge cases)",
+				keys = "/grill-with-docs <feature + context>",
+			},
+			{
+				label = "Same session: write the spec, then review/edit .scratch/<feature>/spec.md",
+				keys = "/to-spec",
+			},
+			{
+				label = "Same session: split into tickets with Blocked by: lines",
+				keys = "/to-tickets",
+			},
+			{
+				label = "Now clear context — clear BETWEEN tickets, never before",
+				keys = "/clear",
+			},
+			{
+				label = "Per ticket, blockers-first: implement, green gate, commit, /clear, next ticket",
+				keys = "/implement .scratch/<feature>/issues/01-….md",
+			},
+			{
+				label = "After the last ticket",
+				keys = "/retro",
+			},
+			{
+				label = "Once routine: whole spec in one command (subagents, one integration branch)",
+				keys = "/implement-spec .scratch/<feature>/spec.md",
+			},
+		},
+	},
+
+	["skills-decision"] = {
+		title = "Skills: decisions-to-make item (Lesson 3)",
+		steps = {
+			{
+				label = "Decisions aren't builds — research first, primary sources only",
+				keys = "/research <question + files to check>",
+			},
+			{
+				label = "Keep working; a background agent leaves a cited markdown file in the repo",
+			},
+			{
+				label = "Grill the decision using the research file; it records an ADR in docs/adr/",
+				keys = "/grill-with-docs <question>. Use the research file at <path>",
+			},
+			{
+				label = "If the answer is 'yes': continue as a feature — /to-spec → /to-tickets → /implement",
+			},
+		},
+	},
+
+	["skills-rules"] = {
+		title = "Skills: rules of thumb",
+		steps = {
+			{
+				label = "Never /clear or /compact between grill → spec → tickets; clear BETWEEN tickets",
+			},
+			{
+				label = "/triage is only for raw incoming bugs/requests — not your own TODO.md items",
+			},
+			{
+				label = "Question you can't settle by talking? /handoff → /prototype in a scratch dir → /handoff back",
+			},
+			{
+				label = "Genuinely broken, resists a first glance → /diagnosing-bugs, then /retro same session",
+			},
+			{
+				label = "Spare moment → /improve-codebase-architecture; chosen opportunity feeds /grill-with-docs",
+			},
+			{
+				label = "Start every repo task with /grill-with-docs — that's what grows GLOSSARY.md and the ADRs",
+			},
+		},
+	},
+
 	diagnostics = {
 		title = "Fix diagnostics sweep",
 		steps = {

@@ -399,7 +399,9 @@ navigable in a float, each runnable step triggered by the player itself.*
   Inside: `j`/`k` move, `r` restart, `s` switch workflow, `q`/`Esc` close.
 - Picking a workflow goes through `vim.ui.select` (the snacks dropdown).
 - **Shipped workflows**: Review agent changes · Feed context to the agent ·
-  Config-iteration loop · Fix diagnostics sweep.
+  Config-iteration loop · Fix diagnostics sweep · Skills lessons 1–3 + rules of
+  thumb (the pi skills workflow from `~/skills-tuto.md`: grill → spec → tickets
+  → implement → retro).
 - A Hyprland chord can't reach inside a TUI; if a desktop-level trigger is ever
   wanted, the `sendshortcut`-relay trick (like Omarchy's web-app binds) is the path.
 
