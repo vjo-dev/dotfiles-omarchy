@@ -114,3 +114,13 @@ end, { desc = "Lazygit" })
 map("n", "<leader>dv", "<cmd>CodeDiff<CR>", { desc = "Diff view (working tree)" })
 map("n", "<leader>dh", "<cmd>CodeDiff history %<CR>", { desc = "File history (diff)" })
 map("n", "<leader>dH", "<cmd>CodeDiff history<CR>", { desc = "Repo history (diff)" })
+
+-- ── Markdown browser preview (live-preview.nvim, config in plugins/ui.lua) ──
+map("n", "<leader>fm", "<cmd>LivePreview pick<CR>", { desc = "Pick Markdown file to preview" })
+map("n", "<leader>tm", function()
+	if require("livepreview").is_running() then
+		vim.cmd("LivePreview close")
+	else
+		vim.cmd("LivePreview start")
+	end
+end, { desc = "Toggle Markdown preview (current file)" })

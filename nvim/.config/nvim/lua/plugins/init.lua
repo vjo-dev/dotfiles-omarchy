@@ -39,7 +39,7 @@ vim.pack.add({
 	gh("nvim-lua/plenary.nvim"), -- todo-comments dependency
 	gh("folke/todo-comments.nvim"),
 	gh("brenoprata10/nvim-highlight-colors"),
-	gh("MeanderingProgrammer/render-markdown.nvim"),
+	gh("brianhuster/live-preview.nvim"),
 	gh("rachartier/tiny-cmdline.nvim"),
 
 	-- §4 Navigating

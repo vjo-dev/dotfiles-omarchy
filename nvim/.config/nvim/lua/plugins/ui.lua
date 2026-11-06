@@ -60,9 +60,15 @@ require("todo-comments").setup({})
 -- Paint hex/rgb/hsl color literals
 require("nvim-highlight-colors").setup({})
 
--- In-buffer Markdown rendering (headlines cut: SPEC.md wart #7)
-require("render-markdown").setup({
-	file_types = { "markdown" },
+-- Browser live-preview for Markdown (replaces in-buffer render-markdown;
+-- see docs/research/nvim-markdown-preview.md). Serves from Neovim's cwd so
+-- repo-relative links/images resolve; keymaps in plugins/keymaps.lua.
+require("livepreview.config").set({
+	browser = "brave",
+	picker = "vim.ui.select", -- Snacks replaces vim.ui.select (ui_select above);
+	-- the plugin's "snacks.picker" enum value is broken upstream (no picker fn)
+	dynamic_root = false,
+	sync_scroll = true,
 })
 
 -- Floating cmdline on top of ui2 (setup-less plugin; §1.6 enabled ui2 and
