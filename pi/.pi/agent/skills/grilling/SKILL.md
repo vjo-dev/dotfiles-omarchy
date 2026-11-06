@@ -5,23 +5,16 @@ description: Grill the user relentlessly about a plan, decision, or idea. Use wh
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
 
-Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the user's answers before the next round.
+Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the whole frontier in one round, then recompute before the next.
 
-Format a round like so:
+Ask every question with the **`ask_user_question` tool** — one tool call per question, never bundled into one prompt. Within a round, make the calls one after another until the frontier is exhausted. For each call:
 
-```
-❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
+- Put the decision in `question`; use `details` for the context the user needs to answer well (trade-offs, what hangs off this decision).
+- Offer the plausible answers as `options`. Put your **recommended answer first** and append " (Recommended)" to its label; use each option's `description` to say what choosing it implies.
+- Use `multiSelect: true` only when several answers can hold at once.
+- Leave `options` empty only for genuinely free-form questions (names, numbers, prose).
 
-➡️ <your recommended answer>
-
----
-
-❓ **Q2** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
-
-➡️ <your recommended answer>
-```
-
-Word each question so "yes" accepts your recommended answer.
+If the `ask_user_question` tool is unavailable, fall back to writing the round as numbered questions (`❓ **Q1** — title, body, ➡️ recommended answer`) in one message and wait for the user's reply.
 
 Each round the user answers reshapes the tree: settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question still open in this round belongs to a _later_ round, not this one.
 
