@@ -7,8 +7,8 @@ require("oil").setup({
 	keymaps = {
 		["<C-h>"] = false, -- stays tmux-navigator's
 		["<M-h>"] = "actions.select_split",
-	["q"] = "actions.close",
-	["<Esc>"] = "actions.close",
+		["q"] = "actions.close",
+		["<Esc>"] = "actions.close",
 	},
 	view_options = {
 		show_hidden = true,
