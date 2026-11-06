@@ -99,6 +99,36 @@ return {
 		},
 	},
 
+	["md-preview"] = {
+		title = "Preview Markdown & Mermaid",
+		steps = {
+			{
+				label = "In a .md buffer: toggle live preview in Brave",
+				keys = "<leader>tm",
+				run = true,
+			},
+			{
+				label = "Type away — ```mermaid blocks and KaTeX render live, even unsaved",
+			},
+			{
+				label = "Preview a different repo doc: fuzzy-pick any .md",
+				keys = "<leader>fm",
+				run = true,
+			},
+			{
+				label = "Done? Same key stops the preview server",
+				keys = "<leader>tm",
+			},
+			{
+				label = "Whole repo as a browsable site (nav tree + Mermaid): run in a shell pane",
+				keys = "mdocs",
+			},
+			{
+				label = "Stop mdocs with Ctrl+C in that pane when finished",
+			},
+		},
+	},
+
 	diagnostics = {
 		title = "Fix diagnostics sweep",
 		steps = {
