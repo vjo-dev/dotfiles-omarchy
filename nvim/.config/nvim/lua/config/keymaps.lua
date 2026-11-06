@@ -5,6 +5,9 @@ local map = vim.keymap.set
 
 map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
+-- Disable macro recording (accidental q presses)
+map("n", "q", "<nop>", { desc = "Disabled (was: record macro)" })
+
 map({ "i", "n", "x", "s" }, "<C-s>", "<cmd>w<CR><Esc>", { desc = "Save file" })
 
 map("n", "<C-a>", "gg<S-v>G", { desc = "Select all" })
