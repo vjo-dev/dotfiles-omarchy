@@ -34,6 +34,17 @@ map("n", "<leader>v", "<cmd>vsplit<CR>", { desc = "Split vertical" })
 map("n", "<leader>h", "<cmd>split<CR>", { desc = "Split horizontal" })
 map("n", "<leader>x", "<cmd>close<CR>", { desc = "Close current split" })
 
+-- Zoom split: <leader>z maximizes the current window, <leader>z again restores
+map("n", "<leader>z", function()
+	if vim.t.zoomed_restore then
+		vim.cmd(vim.t.zoomed_restore)
+		vim.t.zoomed_restore = nil
+	elseif #vim.api.nvim_tabpage_list_wins(0) > 1 then
+		vim.t.zoomed_restore = vim.fn.winrestcmd()
+		vim.cmd("wincmd _ | wincmd |")
+	end
+end, { desc = "Toggle zoom current split" })
+
 map("n", "<A-j>", "<cmd>m .+1<CR>==", { desc = "Move line down" })
 map("n", "<A-k>", "<cmd>m .-2<CR>==", { desc = "Move line up" })
 map("i", "<A-j>", "<Esc><cmd>m .+1<CR>==gi", { desc = "Move line down" })
