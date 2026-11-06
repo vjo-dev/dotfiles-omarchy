@@ -4,7 +4,6 @@ gui:
   mouseEvents: false
 git:
   autoFetch: false
-  # Uncomment once git-delta is installed (sudo pacman -S git-delta):
-  # paging:
-  #   colorArg: always
-  #   pager: delta --dark --paging=never
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
