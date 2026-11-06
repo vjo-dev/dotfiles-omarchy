@@ -7,23 +7,33 @@
 --           ":command"    → ex command
 --           function()end → custom action
 --           nil           → manual step: <CR> just advances
+--
+-- A workflow is either a real workflow (ordered, numbered steps — the
+-- default) or a tuto (unordered reference list, rendered without numbers).
+-- Flag a tuto with `tuto = true`:
+--
+--   ["my-tuto"] = {
+--     title = "Some rules of thumb",
+--     tuto = true,            -- ← renders as bullets, no "1. 2. 3."
+--     steps = { { label = "…" }, { label = "…" } },
+--   },
 
 return {
 	review = {
 		title = "Review agent changes",
 		steps = {
 			{
-				label = "Skim the whole changeset in lazygit (q quits)",
+				label = "Identify all changes in lazygit",
 				keys = "<leader>gg",
 				run = true,
 			},
 			{
-				label = "Walk changed files side-by-side — ]f/[f files, ]c/[c hunks",
+				label = "Walk changed files side-by-side — next: ] or previous: [ (f)iles or (c)hunks",
 				keys = "<leader>dv",
 				run = true,
 			},
 			{
-				label = "In a changed file: toggle the in-file overlay",
+				label = "In a changed file: toggle the in-file changes",
 				keys = "<leader>tg",
 				run = true,
 			},
@@ -49,19 +59,20 @@ return {
 	},
 
 	feed = {
-		title = "Feed context to the agent",
+		title = "Copy line(s) for an agent",
+		tuto = true,
 		steps = {
 			{
-				label = "Cursor on the relevant line: copy path#L to clipboard",
+				label = "Copy one line only in the clipboard",
 				keys = "<leader>yf",
 				run = true,
 			},
 			{
-				label = "Or select code first, copy as fenced block",
+				label = "Copy several lines in the clipboard",
 				keys = "v + motion, then <leader>cc",
 			},
 			{
-				label = "Jump to the agent pane (herdr/tmux) and paste",
+				label = "Jump to the agent pane and paste",
 				keys = "<C-h/j/k/l>",
 			},
 			{
@@ -71,10 +82,13 @@ return {
 	},
 
 	["config-loop"] = {
-		title = "Config-iteration loop (spec-driven)",
+		title = "Update my nvim config (spec-driven)",
 		steps = {
 			{
-				label = "Tell the agent which SPEC-v2.md step to implement",
+				label = "Update the SPEC file (add/update/delete step)",
+			},
+			{
+				label = "Tell the agent which step to implement",
 			},
 			{
 				label = "Review its diff",
@@ -101,43 +115,38 @@ return {
 
 	["md-preview"] = {
 		title = "Preview Markdown & Mermaid",
+		tuto = true,
 		steps = {
 			{
-				label = "In a .md buffer: toggle live preview in Brave",
+				label = "On .md file: toggle live preview in Brave",
 				keys = "<leader>tm",
 				run = true,
 			},
 			{
-				label = "Type away — ```mermaid blocks and KaTeX render live, even unsaved",
-			},
-			{
-				label = "Preview a different repo doc: fuzzy-pick any .md",
+				label = "Find and preview a doc",
 				keys = "<leader>fm",
 				run = true,
 			},
 			{
-				label = "Done? Same key stops the preview server",
+				label = "Stops the preview server",
 				keys = "<leader>tm",
 			},
 			{
-				label = "Whole repo as a browsable site (nav tree + Mermaid): run in a shell pane",
+				label = "Preview entire doc of the project (to run in a terminal)",
 				keys = "mdocs",
-			},
-			{
-				label = "Stop mdocs with Ctrl+C in that pane when finished",
 			},
 		},
 	},
 
 	["skills-small"] = {
-		title = "Skills: small single-session item (Lesson 1)",
+		title = "Matt Pocock skill: small request",
 		steps = {
 			{
-				label = "At the pi prompt: grill the idea (answer its questions; may grow GLOSSARY.md)",
-				keys = "/grill-with-docs <item + context from TODO.md>",
+				label = "Grill the idea (answer the questions)",
+				keys = "/grill-with-docs <idea>",
 			},
 			{
-				label = "Same window — no spec needed for a single-session item",
+				label = "Same session — no spec needed, implement",
 				keys = "/implement <what we just specced>",
 			},
 			{
@@ -151,13 +160,10 @@ return {
 	},
 
 	["skills-feature"] = {
-		title = "Skills: multi-session feature (Lesson 2)",
+		title = "Matt Pocock skill: large request(s)",
 		steps = {
 			{
-				label = "One unbroken session for the thinking — never /clear between grill → spec → tickets",
-			},
-			{
-				label = "Grill the feature (expect questions on fields, ranking, edge cases)",
+				label = "Start the session: Grill the feature (answer the questions)",
 				keys = "/grill-with-docs <feature + context>",
 			},
 			{
@@ -169,8 +175,8 @@ return {
 				keys = "/to-tickets",
 			},
 			{
-				label = "Now clear context — clear BETWEEN tickets, never before",
-				keys = "/clear",
+				label = "Now new context — clear BETWEEN tickets, never before",
+				keys = "/new",
 			},
 			{
 				label = "Per ticket, blockers-first: implement, green gate, commit, /clear, next ticket",
@@ -188,30 +194,28 @@ return {
 	},
 
 	["skills-decision"] = {
-		title = "Skills: decisions-to-make item (Lesson 3)",
+		title = "Matt Pocock skill: decisions-to-make feature",
 		steps = {
 			{
-				label = "Decisions aren't builds — research first, primary sources only",
+				label = "Decisions aren't builds then start research (recorded in a file)",
 				keys = "/research <question + files to check>",
 			},
 			{
-				label = "Keep working; a background agent leaves a cited markdown file in the repo",
-			},
-			{
-				label = "Grill the decision using the research file; it records an ADR in docs/adr/",
+				label = "Grill the decision using the research file",
 				keys = "/grill-with-docs <question>. Use the research file at <path>",
 			},
 			{
-				label = "If the answer is 'yes': continue as a feature — /to-spec → /to-tickets → /implement",
+				label = "Continue as a feature? /to-spec → /to-tickets → /implement",
 			},
 		},
 	},
 
 	["skills-rules"] = {
-		title = "Skills: rules of thumb",
+		title = "Matt Pocock skill: guidelines",
+		tuto = true,
 		steps = {
 			{
-				label = "Never /clear or /compact between grill → spec → tickets; clear BETWEEN tickets",
+				label = "Never /new or /compact between grill → spec → tickets; clear BETWEEN tickets",
 			},
 			{
 				label = "/triage is only for raw incoming bugs/requests — not your own TODO.md items",
@@ -232,15 +236,15 @@ return {
 	},
 
 	diagnostics = {
-		title = "Fix diagnostics sweep",
+		title = "Investigate diagnostics",
+		tuto = true,
 		steps = {
 			{
-				label = "Jump to the next problem (cycles, float explains)",
-				keys = "<A-n>",
-				run = true,
+				label = "Cycle between the problems (read the float info)",
+				keys = "<A-n> / <A-p>",
 			},
 			{
-				label = "Need the full picture? List every diagnostic",
+				label = "List every diagnostic",
 				keys = "<leader>fd",
 				run = true,
 			},
@@ -250,16 +254,8 @@ return {
 				run = true,
 			},
 			{
-				label = "Repeat <A-n> → <leader>ca until the gutter is clean",
-			},
-			{
 				label = "Format the buffer",
 				keys = "<leader>=",
-				run = true,
-			},
-			{
-				label = "Save",
-				keys = "<C-s>",
 				run = true,
 			},
 		},
