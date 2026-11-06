@@ -85,3 +85,8 @@ local scroll_step = 5
 
 o.bind("SUPER + ALT + UP", "Scroll Up", o.shell_quote(scroll_helper) .. " 0 " .. scroll_step, { repeating = true })
 o.bind("SUPER + ALT + DOWN", "Scroll Down", o.shell_quote(scroll_helper) .. " 0 -" .. scroll_step, { repeating = true })
+
+-- Neovim keybindings book (nvim/SPEC-v2.md §9) — sibling of the tmux and
+-- herdr books on SUPER+ALT+K / SUPER+CTRL+K. Also appears as an entry in
+-- the main SUPER+K book via this description.
+o.bind("SUPER + SHIFT + K", "Neovim keybindings", "omarchy-menu-nvim-keybindings")

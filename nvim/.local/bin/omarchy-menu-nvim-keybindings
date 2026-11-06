@@ -1,0 +1,128 @@
+#!/bin/bash
+
+# omarchy:summary=Display Neovim keybindings from the active config using an interactive search menu.
+# omarchy:args=[--print|-p] [--appname <name>]
+#
+# Sibling of omarchy-menu-tmux-keybindings / omarchy-menu-herdr-keybindings.
+# Dumps the real keymaps (every mapping with a desc=) from a headless Neovim
+# running the active config, caches the records, and shows them in the
+# Omarchy select menu. See ~/dotfiles/nvim/SPEC-v2.md §9.
+
+set -o pipefail
+
+print_only=false
+appname="${OMARCHY_NVIM_KEYBOOK_APPNAME:-nvim-v2}" # flip to "nvim" at v2 cutover
+
+while (($#)); do
+  case "$1" in
+    --print | -p)
+      print_only=true
+      ;;
+    --appname)
+      shift
+      appname="$1"
+      ;;
+  esac
+  shift
+done
+
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/$appname"
+if [[ ! -d $config_dir ]]; then
+  echo "Neovim config not found: $config_dir" >&2
+  exit 1
+fi
+
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/omarchy"
+cache_key=$(
+  {
+    echo "keybook-v2"
+    nvim --version 2>/dev/null | head -1
+    find -L "$config_dir" -name '*.lua' -printf '%P %T@\n' 2>/dev/null | sort
+  } | sha256sum | awk '{print $1}'
+)
+cache_file="$cache_dir/nvim-keybindings-$cache_key.records"
+
+dump_keybindings() {
+  local lua_script out_file status
+  lua_script=$(mktemp --suffix=.lua) || return 1
+  out_file=$(mktemp) || return 1
+
+  cat >"$lua_script" <<'LUA'
+local out = assert(io.open(vim.g.keybook_out, "w"))
+local order = { n = 1, v = 2, x = 3, s = 4, o = 5, i = 6, c = 7, t = 8 }
+local label = {
+	n = "NORMAL",
+	v = "VISUAL",
+	x = "VISUAL",
+	s = "SELECT",
+	o = "OPMODE",
+	i = "INSERT",
+	c = "CMDLINE",
+	t = "TERMINAL",
+}
+local seen, records = {}, {}
+for mode in pairs(order) do
+	for _, m in ipairs(vim.api.nvim_get_keymap(mode)) do
+		-- Skip ":command"-style builtin descriptions and <Plug> internals;
+		-- keep real, worded descriptions (ours and Nvim's useful defaults).
+		if m.desc and m.desc ~= "" and m.desc:sub(1, 1) ~= ":" and not m.lhs:find("^<Plug>") then
+			local mmode = m.mode or mode
+			local lhs = m.lhs:gsub("^%s", "SPC "):gsub("^SPC $", "SPC")
+			local key = mmode .. "\031" .. lhs
+			if not seen[key] then
+				seen[key] = true
+				records[#records + 1] = { order[mmode] or 9, lhs, m.desc, label[mmode] or mmode }
+			end
+		end
+	end
+end
+table.sort(records, function(a, b)
+	if a[1] ~= b[1] then
+		return a[1] < b[1]
+	end
+	return a[2]:lower() < b[2]:lower()
+end)
+for _, r in ipairs(records) do
+	out:write(string.format("%-9s %-26s → %s\n", r[4], r[2], r[3]))
+end
+out:close()
+LUA
+
+  NVIM_APPNAME="$appname" nvim --headless \
+    --cmd "lua vim.g.keybook_out = [[$out_file]]" \
+    "+luafile $lua_script" "+qa!" >/dev/null 2>&1
+  status=$?
+
+  [[ $status -eq 0 ]] && cat "$out_file"
+  rm -f "$lua_script" "$out_file"
+  return $status
+}
+
+output_keybindings() {
+  if [[ -s $cache_file ]]; then
+    cat "$cache_file"
+    return 0
+  fi
+
+  mkdir -p "$cache_dir" || return 1
+  local tmp
+  tmp=$(mktemp "$cache_dir/nvim-keybindings.XXXXXX") || return 1
+
+  if dump_keybindings >"$tmp" && [[ -s $tmp ]]; then
+    mv "$tmp" "$cache_file"
+    find "$cache_dir" -maxdepth 1 -type f -name 'nvim-keybindings-*.records' \
+      ! -name "$(basename "$cache_file")" -delete 2>/dev/null || true
+    cat "$cache_file"
+  else
+    rm -f "$tmp"
+    echo "Could not dump Neovim keybindings from $config_dir" >&2
+    return 1
+  fi
+}
+
+if $print_only; then
+  output_keybindings
+else
+  # Informational book: the selection has nothing to dispatch.
+  output_keybindings | omarchy-menu-select 'Neovim keybindings' -- --width 800 --height 500 >/dev/null
+fi
