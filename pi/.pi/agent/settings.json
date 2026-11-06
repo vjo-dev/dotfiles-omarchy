@@ -1,6 +1,6 @@
 {
   "theme": "omarchy-system",
-  "lastChangelogVersion": "1.4.0",
+  "lastChangelogVersion": "1.5.0",
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-fable-5",
   "markdown": {
@@ -21,5 +21,10 @@
     "pr": false,
     "contextMode": "percent"
   },
-  "hideThinkingBlock": false
+  "hideThinkingBlock": false,
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:@gotgenes/pi-permission-system@42.0.0\",\"scope\":\"user\"}": "42.0.0",
+    "{\"source\":\"npm:pi-image-tools@1.4.0\",\"scope\":\"user\"}": "1.4.0",
+    "{\"source\":\"npm:pi-web-access@0.46.0\",\"scope\":\"user\"}": "0.46.0"
+  }
 }
