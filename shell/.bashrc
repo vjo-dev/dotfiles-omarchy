@@ -17,10 +17,19 @@ alias vim='nvim'
 # Whole-repo Markdown preview in Brave: mkdocs with an inline config (no
 # per-project mkdocs.yml needed; nav is inferred from every .md under $PWD).
 # Material theme + superfences so ```mermaid blocks render as diagrams.
-# See dotfiles docs/research/nvim-markdown-preview.md. Ctrl+C stops it.
+# Picks the first free port from 8765 up, so several projects can run at
+# once; `mdocs 9000` forces a port. Ctrl+C stops it.
+# See dotfiles docs/research/nvim-markdown-preview.md.
 mdocs() {
-  (sleep 2 && brave --new-window http://127.0.0.1:8765/ >/dev/null 2>&1) &
-  uvx --with mkdocs-material mkdocs serve -f - -a 127.0.0.1:8765 <<EOF
+  local port="${1:-8765}"
+  if [[ -z "$1" ]]; then
+    while (echo > "/dev/tcp/127.0.0.1/$port") 2>/dev/null; do
+      port=$((port + 1))
+    done
+  fi
+  echo "mdocs: serving ${PWD##*/} on http://127.0.0.1:$port/"
+  (sleep 2 && brave --new-window "http://127.0.0.1:$port/" >/dev/null 2>&1) &
+  uvx --with mkdocs-material mkdocs serve -f - -a "127.0.0.1:$port" <<EOF
 site_name: "${PWD##*/}"
 docs_dir: "$PWD"
 site_dir: "/tmp/mkdocs-preview"
