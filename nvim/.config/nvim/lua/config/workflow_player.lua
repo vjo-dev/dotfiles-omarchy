@@ -45,9 +45,17 @@ local function render(buf, wf)
 	local total = #wf.steps
 	local lines = { "" }
 	for i, step in ipairs(wf.steps) do
-		local marker = (i < state.idx and "✓") or (i == state.idx and "▶") or "·"
+		-- Tutos have no notion of "done": no ✓, only the current-line pointer.
+		local marker
+		if wf.tuto then
+			marker = (i == state.idx and "▶") or "·"
+		else
+			marker = (i < state.idx and "✓") or (i == state.idx and "▶") or "·"
+		end
 		local keys = step.keys and ("  [" .. pretty_keys(step.keys) .. "]") or ""
-		lines[#lines + 1] = ("  %s %d. %s%s"):format(marker, i, step.label, keys)
+		-- Tutos are unordered reference lists: plain bullets, no step numbers.
+		local bullet = wf.tuto and "" or ("%d. "):format(i)
+		lines[#lines + 1] = ("  %s %s%s%s"):format(marker, bullet, step.label, keys)
 	end
 	vim.list_extend(lines, {
 		"",
@@ -62,7 +70,7 @@ local function render(buf, wf)
 	vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
 	for i, step in ipairs(wf.steps) do
 		local row = i -- line 1 is the leading blank
-		local hl = (i < state.idx and "Comment") or (i == state.idx and "Visual") or nil
+		local hl = (i == state.idx and "Visual") or (not wf.tuto and i < state.idx and "Comment") or nil
 		if hl then
 			vim.api.nvim_buf_set_extmark(buf, ns, row, 0, { line_hl_group = hl })
 		end
@@ -89,6 +97,8 @@ local function notify_progress(wf)
 	if state.idx > total then
 		vim.notify(("Workflow “%s” complete 🎉"):format(wf.title))
 		state.name, state.idx = nil, 1
+	elseif wf.tuto then
+		vim.notify(("%s · resume with SPC w"):format(wf.title))
 	else
 		vim.notify(("%s — step %d/%d · resume with SPC w"):format(wf.title, state.idx, total))
 	end
