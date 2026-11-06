@@ -3,7 +3,17 @@
 
 local map = vim.keymap.set
 
-map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
+-- Esc: clear search highlight + close focusable floats (diagnostic float,
+-- LSP hover). Skips non-focusable floats (snacks notifications, which-key).
+map("n", "<Esc>", function()
+	vim.cmd("nohlsearch")
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		local cfg = vim.api.nvim_win_get_config(win)
+		if cfg.relative ~= "" and cfg.focusable then
+			pcall(vim.api.nvim_win_close, win, false)
+		end
+	end
+end, { desc = "Clear search highlight, close floats" })
 
 -- Disable macro recording (accidental q presses)
 map("n", "q", "<nop>", { desc = "Disabled (was: record macro)" })
@@ -18,6 +28,11 @@ map("n", "-", "<C-x>", { desc = "Decrement number" })
 
 map("n", "<leader>o", "o<Esc>", { desc = "Empty line below" })
 map("n", "<leader>O", "O<Esc>", { desc = "Empty line above" })
+
+-- Splits — mirrors herdr's prefix+v / prefix+h (different leader, same letters)
+map("n", "<leader>v", "<cmd>vsplit<CR>", { desc = "Split vertical" })
+map("n", "<leader>h", "<cmd>split<CR>", { desc = "Split horizontal" })
+map("n", "<leader>x", "<cmd>close<CR>", { desc = "Close current split" })
 
 map("n", "<A-j>", "<cmd>m .+1<CR>==", { desc = "Move line down" })
 map("n", "<A-k>", "<cmd>m .-2<CR>==", { desc = "Move line up" })
@@ -37,8 +52,8 @@ end, { desc = "Next diagnostic (cycles)" })
 map("n", "<A-p>", function()
 	vim.diagnostic.jump({ count = -1, float = true })
 end, { desc = "Previous diagnostic (cycles)" })
-map("n", "<leader>e", vim.diagnostic.open_float, { desc = "Diagnostic float" })
-map("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Diagnostic loclist" })
+map("n", "<leader>te", vim.diagnostic.open_float, { desc = "Diagnostic float" })
+map("n", "<leader>td", vim.diagnostic.setloclist, { desc = "Diagnostic loclist" })
 
 -- The agent-iteration loop (SPEC-v2 §1.8): :wa first — unsaved buffers block it.
 map("n", "ZR", "<cmd>restart<CR>", { desc = "Restart Neovim, restore session" })

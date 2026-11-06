@@ -3,7 +3,7 @@
 
 -- §6.6 Diagnostics look — v1 behavior: gutter icons left of the line numbers,
 -- NO inline virtual text (the code stays clean); messages appear in a float
--- when jumping with ]d / [d or on <leader>e.
+-- when jumping with ]d / [d or on <leader>te.
 vim.diagnostic.config({
 	severity_sort = true,
 	update_in_insert = false,

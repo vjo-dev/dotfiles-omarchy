@@ -24,7 +24,7 @@ return {
 			},
 			{
 				label = "In a changed file: toggle the in-file overlay",
-				keys = "<leader>gd",
+				keys = "<leader>tg",
 				run = true,
 			},
 			{

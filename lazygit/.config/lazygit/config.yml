@@ -2,6 +2,11 @@
 # <leader>gg lazygit float and standalone lazygit.
 gui:
   mouseEvents: false
+os:
+  # Inside a Neovim terminal ($NVIM set), 'o' opens the file in the host
+  # Neovim instead of letting xdg-open spawn a nested nvim (which deadlocks
+  # lazygit: it waits synchronously while the nested nvim fights for the TTY).
+  open: 'if [ -n "$NVIM" ]; then nvim --server "$NVIM" --remote {{filename}}; else xdg-open {{filename}} > /dev/null; fi'
 git:
   autoFetch: false
   diffRenderers:
