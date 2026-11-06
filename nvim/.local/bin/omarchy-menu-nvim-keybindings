@@ -11,7 +11,7 @@
 set -o pipefail
 
 print_only=false
-appname="${OMARCHY_NVIM_KEYBOOK_APPNAME:-nvim-v2}" # flip to "nvim" at v2 cutover
+appname="${OMARCHY_NVIM_KEYBOOK_APPNAME:-nvim}" # use --appname nvim-v1 for the retired backup
 
 while (($#)); do
   case "$1" in

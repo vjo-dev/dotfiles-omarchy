@@ -33,8 +33,9 @@ nag, the swapped `<C-w>s`/`<C-w>v`.
 
 - Neovim **0.12+** (installed: 0.12.6). The config relies on `vim.pack`,
   `vim.lsp.enable` + `after/lsp/`, `:restart`, and the ui2 message UI.
-- Lives at `~/dotfiles/nvim/.config/nvim-v2`, run as `NVIM_APPNAME=nvim-v2 nvim`
-  (shell alias `nv2`). Cutover = rename/symlink swap in dotfiles; v1 stays intact until then.
+- **Live since the cutover** at `~/dotfiles/nvim/.config/nvim` (stowed to
+  `~/.config/nvim`). v1 remains a runnable backup at `nvim/.config/nvim-v1`:
+  `NVIM_APPNAME=nvim-v1 nvim`.
 
 ### 0.2 CLI tools
 
@@ -415,8 +416,8 @@ navigable in a float, each runnable step triggered by the player itself.*
     internals filtered out), formatted `MODE  keys → desc`.
   - Cached under `~/.cache/omarchy/`, keyed on nvim version + config file mtimes;
     `--print` mode supported like its siblings.
-  - `--appname` / `OMARCHY_NVIM_KEYBOOK_APPNAME` select the config; default `nvim-v2`
-    until cutover flips it to `nvim`.
+  - `--appname` / `OMARCHY_NVIM_KEYBOOK_APPNAME` select the config; default `nvim`
+    (flipped at cutover); `--appname nvim-v1` reads the retired backup.
   - Presented with `omarchy-menu-select 'Neovim keybindings'` (informational — nothing
     to dispatch).
 - Hyprland bind in `~/.config/hypr/bindings.lua`:
@@ -440,4 +441,4 @@ navigable in a float, each runnable step triggered by the player itself.*
 | 7 ✓ | §7 git review deck |
 | 8 ✓ | §8 agent helpers |
 | 9 ✓ | §9 keybindings book + hypr bind |
-| 10 | cutover: swap dotfiles symlink, retire v1, flip the keybook appname to `nvim`, update SPEC.md |
+| 10 ✓ | cutover: v2 → `nvim/.config/nvim`, v1 → `nvim/.config/nvim-v1` (runnable backup), keybook appname → `nvim`, SPEC.md banner |

@@ -11,11 +11,13 @@ Lives at `nvim/SPEC.md`; agents implement from it, humans review against it.
 _Avoid_: README, docs, notes
 
 **v1**:
-The current, kickstart-derived, lazy.nvim-managed Neovim config as described by the spec's baseline.
+The kickstart-derived, lazy.nvim-managed Neovim config that preceded the rebuild;
+retired at cutover and kept as a runnable backup (`NVIM_APPNAME=nvim-v1`).
 _Avoid_: old config, legacy config
 
 **v2**:
-The planned rebuild of the Neovim config oriented to the agentic workflow.
+The agentic-workflow rebuild of the Neovim config; the live `~/.config/nvim` since
+the cutover.
 _Avoid_: new config, rewrite
 
 **Theme bridge**:

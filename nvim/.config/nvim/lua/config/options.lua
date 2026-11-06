@@ -1,83 +1,64 @@
--- Leader keys must be set before lazy.nvim loads any plugin
+-- SPEC-v2 §1.2–1.6 — options. Leader keys first: everything else depends on them.
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
+-- §1.2 Basics
+vim.o.mouse = "a" -- kept v1 habit: split resizing
+vim.o.clipboard = "unnamedplus" -- transport handled by config/clipboard.lua when remote
+vim.o.expandtab = true -- 2-space indent
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.softtabstop = 2
+vim.o.smartindent = true
+vim.o.breakindent = true
 
--- Omarchy remote clipboard provider (OSC 52 / wl-copy for tmux, SSH, herdr)
-require("config.remote_clipboard").setup()
-
--- [[ Setting options ]]
--- See `:help vim.opt`
--- For more options, you can see `:help option-list`
-
--- Set encoding
-vim.opt.encoding = "utf-8"
-
--- Make line numbers default
-vim.opt.number = true
-
--- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = "a"
-
--- Don't show the mode, since it's already in the status line
-vim.opt.showmode = false
-
--- Sync clipboard between OS and Neovim.
--- The transport is handled by config.remote_clipboard when needed.
-vim.opt.clipboard = "unnamedplus"
-
--- Enable break indent
-vim.opt.breakindent = true
-
--- Save undo history
-vim.opt.undofile = true
-
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-
--- Keep signcolumn on by default
-vim.opt.signcolumn = "yes"
-vim.opt.shada = { "'10", "<0", "s10", "h" }
-
--- Decrease update time
-vim.opt.updatetime = 250
-
--- Decrease mapped sequence wait time
--- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
-
--- Configure how new splits should be opened
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'` and `:help 'listchars'`
-vim.opt.list = true
+-- §1.3 Look of the buffer
+vim.o.number = true
+vim.o.relativenumber = true -- hybrid numbers: counts for review jumps like d5j
+vim.o.cursorline = true
+vim.o.scrolloff = 10
+vim.o.signcolumn = "yes" -- no text jump when git/diagnostic marks appear
+vim.o.showtabline = 2 -- bufferline arrives in step 3
+vim.o.laststatus = 3 -- one global statusline
+vim.o.termguicolors = true
+vim.o.title = true -- terminal tab shows the file name
+vim.o.winborder = "rounded" -- every float
+vim.o.list = true -- make stray whitespace visible
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+vim.o.inccommand = "split" -- live :s preview
 
--- Preview substitutions live, as you type!
-vim.opt.inccommand = "split"
+-- §1.4 Search, files, undo, timing
+vim.o.ignorecase = true
+vim.o.smartcase = true -- case-insensitive until a capital appears
+vim.o.swapfile = false
+vim.o.writebackup = false
+vim.o.undofile = true -- undo survives closing the file
+vim.o.shada = "'10,<0,s10,h" -- few oldfiles, no registers: privacy over history
+vim.o.updatetime = 250
+vim.o.timeoutlen = 300 -- which-key pops up fast (step 4)
 
--- Show which line your cursor is on
-vim.opt.cursorline = true
+-- §1.5 Splits and folds
+vim.o.splitright = true
+vim.o.splitbelow = true
+vim.o.foldmethod = "expr" -- folds from treesitter
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldlevel = 99 -- everything starts open; close by syntax (zc/zM)
+vim.o.foldlevelstart = 99
 
--- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
-
--- Tabs management
-vim.opt.expandtab = true -- convert tabs to spaces
-vim.opt.shiftwidth = 2 -- the number of spaces inserted for each indentation
-vim.opt.tabstop = 2 -- displays 2 spaces for a tab
-vim.opt.softtabstop = 2 -- insert 2 spaces for a tab key
-vim.opt.showtabline = 2 -- always show tabs
-
--- Terminal colors
-vim.opt.termguicolors = true
-
--- border for diagnostic
-vim.diagnostic.config({
-	float = { border = "single" },
-})
+-- §1.6 Messages: experimental ui2 (vim._core.ui2 on 0.12.6, formerly vim._extui)
+-- Short messages go to an ephemeral floating window, gone after 5 s; long
+-- output lands in the pager (g< reopens it). Must come after the options above.
+vim.o.cmdheight = 0
+local ok, ui2 = pcall(require, "vim._core.ui2")
+if not ok then
+	ok, ui2 = pcall(require, "vim._extui") -- pre-rename fallback
+end
+if ok then
+	ui2.enable({
+		msg = {
+			target = "msg", -- ephemeral message window suits cmdheight=0
+			msg = { timeout = 5000 },
+		},
+	})
+end

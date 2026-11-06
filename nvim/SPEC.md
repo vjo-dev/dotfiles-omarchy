@@ -1,5 +1,9 @@
 # Neovim config spec — v1 (current state)
 
+> **Retired.** v2 is the live config since the cutover (see
+> [SPEC-v2.md](./SPEC-v2.md)). This v1 config is kept as a runnable backup at
+> `nvim/.config/nvim-v1` — launch it with `NVIM_APPNAME=nvim-v1 nvim`.
+
 This spec describes the Neovim setup as it exists today in `~/dotfiles/nvim/.config/nvim`
 (symlinked to `~/.config/nvim`), in the style of a plain-English spec: *what* each piece
 does and *why* it is there. It is the baseline for the v2 "agentic workflow" retrofit.
