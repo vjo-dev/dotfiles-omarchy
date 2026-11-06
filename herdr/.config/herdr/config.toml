@@ -137,6 +137,34 @@ tab_bar_right = [{ type = "zoom" }, { type = "hostname" }]
 window_title = "{hostname}: {workspace}"
 
 status_indicators = "symbols"
+
+[ui.sidebar.agents]
+# Line 1 (bright white, bold): tab name, falling back to the agent name when
+# the tab still has its default integer name. Rules can't cross-reference
+# tokens, so the fallback is approximated: numeric rules only match values
+# that parse fully as numbers, so `gt = -1` hides exactly the default
+# integer tab names. Caveat: a custom-named tab renders as "name · agent".
+# Line 2 (faded grey): machine · workspace.
+rows = [
+  [
+    "state_icon",
+    { token = "tab", fg = "#ffffff", bold = true, rules = [{ gt = -1, hide = true }] },
+    { token = "agent", fg = "#ffffff", bold = true },
+  ],
+  [
+    { token = "machine", fg = "#9399b2" },
+    { token = "workspace", fg = "#9399b2" },
+  ],
+]
+
+[ui.sidebar.spaces]
+# Same emphasis scheme as the agent rows: workspace bright white and bold,
+# git info faded grey. git_status keeps its default styling because a fg
+# override would flatten its green/red ahead-behind colors.
+rows = [
+  ["state_icon", { token = "workspace", fg = "#ffffff", bold = true }],
+  [{ token = "branch", fg = "#9399b2" }, "git_status"],
+]
 [ui.toast]
 # "system" talks to the OS notification daemon (Omarchy's quickshell) directly;
 # "terminal" relied on OSC escapes the terminal here doesn't support.
