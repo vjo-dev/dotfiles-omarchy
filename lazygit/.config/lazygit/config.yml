@@ -1,0 +1,10 @@
+# Managed by dotfiles (see nvim/SPEC-v2.md §7.4) — used by Neovim's
+# <leader>gg lazygit float and standalone lazygit.
+gui:
+  mouseEvents: false
+git:
+  autoFetch: false
+  # Uncomment once git-delta is installed (sudo pacman -S git-delta):
+  # paging:
+  #   colorArg: always
+  #   pager: delta --dark --paging=never
