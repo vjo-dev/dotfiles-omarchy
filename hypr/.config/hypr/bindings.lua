@@ -51,6 +51,11 @@ o.bind("SUPER + ALT + Z", "Full screen", hl.dsp.window.fullscreen({ mode = "full
 o.bind("SUPER + Z", "Full width", hl.dsp.window.fullscreen({ mode = "maximized" }))
 o.bind("SUPER + B", "Browser", { omarchy = "browser" })
 
+-- Move "Close window" from SUPER+W to SUPER+Q: CTRL+W (close browser tab)
+-- muscle memory too often landed on SUPER+W and killed the whole window.
+hl.unbind("SUPER + W")        -- was: Close window
+o.bind("SUPER + Q", "Close window", hl.dsp.window.close())
+
 -- Agent Chat plugin (robson.agent-chat): fullscreen chat with the default
 -- coding agent. Plain SUPER+A was unbound (Agent terminal is SUPER+SHIFT+CTRL+A).
 o.bind("SUPER + A", "Agent chat", "omarchy-shell shell toggle robson.agent-chat")
