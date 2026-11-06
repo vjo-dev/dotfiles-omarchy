@@ -16,11 +16,23 @@ alias vim='nvim'
 
 # Whole-repo Markdown preview in Brave: mkdocs with an inline config (no
 # per-project mkdocs.yml needed; nav is inferred from every .md under $PWD).
+# Material theme + superfences so ```mermaid blocks render as diagrams.
 # See dotfiles docs/research/nvim-markdown-preview.md. Ctrl+C stops it.
 mdocs() {
   (sleep 2 && brave --new-window http://127.0.0.1:8765/ >/dev/null 2>&1) &
-  printf 'site_name: "%s"\ndocs_dir: "%s"\nsite_dir: "/tmp/mkdocs-preview"\n' \
-    "${PWD##*/}" "$PWD" | uvx mkdocs serve -f - -a 127.0.0.1:8765
+  uvx --with mkdocs-material mkdocs serve -f - -a 127.0.0.1:8765 <<EOF
+site_name: "${PWD##*/}"
+docs_dir: "$PWD"
+site_dir: "/tmp/mkdocs-preview"
+theme:
+  name: material
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+EOF
 }
 
 # ssh-agent

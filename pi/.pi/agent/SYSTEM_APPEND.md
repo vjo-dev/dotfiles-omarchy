@@ -27,6 +27,7 @@
 * **ADR Location:** Decision records live in `docs/adr/` unless the project says otherwise.
 * **Unprompted Docs:** Never create documentation files unprompted. If one seems genuinely warranted, propose it in the plan and wait for approval.
 * **Doc Drift:** When touching code whose existing docs now contradict it, flag the drift; prefer trimming or deleting redundant docs over expanding them.
+* **Diagrams over prose (Mermaid):** In any permitted doc (ADR, architecture, research note, PR body), prefer a Mermaid diagram over prose when describing relationships, flows, states, or timelines: flows → `flowchart`/`sequenceDiagram`, lifecycles → `stateDiagram-v2`, data models → `erDiagram`, schedules → `gantt`. Diagram first, short caption after. Do not force it: a diagram that merely restates a bullet list is noise — use one only where structure beats words.
 * **Comments (LIGHT):** Sparse by default — well-factored code needs few. Use only where code cannot make itself clear: non-obvious *why* (constraints, gotchas, workarounds). Never restate *what* the code does, and never relocate banned documentation into comments (no doc-style headers, narrative walkthroughs, tutorial blocks, or changelog comments).
 
 ## Git Workflow & Guardrails
