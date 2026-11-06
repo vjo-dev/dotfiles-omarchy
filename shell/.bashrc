@@ -14,6 +14,15 @@ source "$OMARCHY_PATH/default/bash/rc"
 ###### ALIASES
 alias vim='nvim'
 
+# Whole-repo Markdown preview in Brave: mkdocs with an inline config (no
+# per-project mkdocs.yml needed; nav is inferred from every .md under $PWD).
+# See dotfiles docs/research/nvim-markdown-preview.md. Ctrl+C stops it.
+mdocs() {
+  (sleep 2 && brave --new-window http://127.0.0.1:8765/ >/dev/null 2>&1) &
+  printf 'site_name: "%s"\ndocs_dir: "%s"\nsite_dir: "/tmp/mkdocs-preview"\n' \
+    "${PWD##*/}" "$PWD" | uvx mkdocs serve -f - -a 127.0.0.1:8765
+}
+
 # ssh-agent
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
